@@ -15,14 +15,6 @@ const App = () => {
     ]);
   }, []);
 
-  data?.forEach(({ id, price }) => {
-    if (priceMap.has(id)) {
-      priceMap.set(id, `${priceMap.get(id)}, ${price}`);
-    } else {
-      priceMap.set(id, `${price}`);
-    }
-  });
-
   const handleClick = (id) => {
     setSelectedId(id);
   };
@@ -32,11 +24,18 @@ const App = () => {
       {data ? (
         <React.Fragment>
           <ul>
-            {data.map(({ id, price }, index) => (
+            {data.map(({ id, price }, index) => {
+              if (priceMap.has(id)) {
+                priceMap.set(id, `${priceMap.get(id)}, ${price}`);
+              } else {
+                priceMap.set(id, `${price}`);
+              }
+              return(
               <li key={index} onClick={() => handleClick(id)}>
                 Price {price}: id {id}
               </li>
-            ))}
+              )
+            })}
           </ul>
           <p>Prices for ID {selectedId}:</p>
           {selectedId && <p>{priceMap.get(selectedId)}</p>}
